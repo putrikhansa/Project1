@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project1/models/doa_model.dart';
 import 'package:project1/services/doa_service.dart';
-import 'package:project1/doa/detail_doa_screen.dart';
+import 'package:project1/pages/doa/detail_doa_screen.dart';
 
 class ListDoaScreen extends StatelessWidget {
   const ListDoaScreen({super.key});
