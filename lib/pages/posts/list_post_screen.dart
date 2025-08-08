@@ -8,8 +8,13 @@ class ListPostScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF3F6FD), // ✅ Sama dengan Beranda
       appBar: AppBar(
         title: const Text('Daftar Post'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.indigo, // ✅ Warna utama
+        foregroundColor: Colors.white,
       ),
       body: FutureBuilder<List<PostModel>>(
         future: PostService.ListPost(),
@@ -19,7 +24,12 @@ class ListPostScreen extends StatelessWidget {
           }
 
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(
+              child: Text(
+                'Terjadi kesalahan: ${snapshot.error}',
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
           }
 
           final dataPost = snapshot.data ?? [];
@@ -29,11 +39,12 @@ class ListPostScreen extends StatelessWidget {
           }
 
           return ListView.builder(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(16),
             itemCount: dataPost.length,
             itemBuilder: (context, index) {
               final data = dataPost[index];
               return Card(
+                color: Colors.white,
                 elevation: 3,
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 shape: RoundedRectangleBorder(
@@ -42,15 +53,23 @@ class ListPostScreen extends StatelessWidget {
                 child: ListTile(
                   contentPadding: const EdgeInsets.all(16),
                   leading: CircleAvatar(
-                    child: Text(data.id.toString()),
-                    backgroundColor: Colors.blueAccent,
+                    backgroundColor: Colors.indigoAccent, // ✅ Warna disamakan
                     foregroundColor: Colors.white,
+                    child: Text(
+                      data.id.toString(),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   ),
                   title: Text(
                     data.title,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
                   ),
                   subtitle: Text('User ID: ${data.userId}'),
+                  trailing: const Icon(Icons.arrow_forward_ios,
+                      size: 16, color: Colors.indigoAccent),
                   onTap: () {
                     // TODO: Navigate to detail screen
                   },

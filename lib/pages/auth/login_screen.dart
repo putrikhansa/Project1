@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project1/pages/BottomNavScreen.dart';
 import 'package:project1/pages/auth/register_screen.dart';
 import 'package:project1/pages/menu_secreen.dart';
 import 'package:project1/services/auth_service.dart';
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   if (success) {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (_) => MenuScreen()),
+                      MaterialPageRoute(builder: (_) => MainNavigationScreen()),
                     );
                   } else {
                     ScaffoldMessenger.of(

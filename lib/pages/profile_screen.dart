@@ -25,76 +25,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     if (_user == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        backgroundColor: Color(0xFFF3F6FD),
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
-    return SingleChildScrollView(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
+    return Scaffold(
+      backgroundColor: const Color(0xFFF3F6FD),
+      appBar: AppBar(
+        title: const Text("Profil Saya"),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.indigo,
+        foregroundColor: Colors.white,
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Avatar
             CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.blue.shade100,
-              child: Icon(Icons.person, size: 60, color: Colors.blue),
+              radius: 60,
+              backgroundColor: Colors.indigo.shade100,
+              child: const Icon(Icons.person, size: 60, color: Colors.indigo),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
-            // Username
+            // Nama
             Text(
               _user!['name'],
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
             ),
-            Text(_user!['email'], style: TextStyle(color: Colors.grey[600])),
-            const SizedBox(height: 30),
+            const SizedBox(height: 6),
+            Text(
+              _user!['email'],
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 32),
 
             // Info Card
-            Card(
-              shape: RoundedRectangleBorder(
+            Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 20,
-                  vertical: 16,
-                ),
-                child: Column(
-                  children: [
-                    _infoTile("Email", _user!['email']),
-                    const Divider(),
-                    _infoTile(
-                      "Tanggal Daftar",
-                      _user!['created_at'].substring(0, 10),
-                    ),
-                  ],
-                ),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _infoRow(Icons.email, "Email", _user!['email']),
+                  const Divider(height: 32),
+                  _infoRow(Icons.calendar_today, "Tanggal Daftar",
+                      _user!['created_at'].substring(0, 10)),
+                ],
               ),
             ),
 
             const SizedBox(height: 40),
 
             // Logout Button
-            ElevatedButton.icon(
-              onPressed: () async {
-                await AuthService().logout();
-                Navigator.pushReplacementNamed(
-                  context,
-                  '/',
-                ); // arahkan ke login
-              },
-              icon: Icon(Icons.logout),
-              label: Text("Logout"),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
-                  vertical: 12,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  await AuthService().logout();
+                  if (mounted) {
+                    Navigator.pushReplacementNamed(context, '/');
+                  }
+                },
+                icon: const Icon(Icons.logout),
+                label: const Text("Logout"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  textStyle: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -104,12 +130,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _infoTile(String title, String value) {
+  Widget _infoRow(IconData icon, String title, String value) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title, style: TextStyle(fontWeight: FontWeight.w500)),
-        Text(value),
+        Icon(icon, color: Colors.indigo),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                value,
+                style: const TextStyle(fontSize: 16),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }

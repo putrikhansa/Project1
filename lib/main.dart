@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:project1/pages/BottomNavScreen.dart';
 import 'package:project1/pages/auth/login_screen.dart';
 import 'package:project1/pages/menu_secreen.dart';
 import 'package:project1/pages/posts/list_post_screen.dart';
@@ -48,7 +49,7 @@ class _AuthCheckState extends State<AuthCheck> {
             body: Center(child: CircularProgressIndicator()),
           );
         } else if (snapshot.hasData && snapshot.data == true) {
-          return MenuScreen();
+          return MainNavigationScreen();
         } else {
           return LoginScreen();
         }

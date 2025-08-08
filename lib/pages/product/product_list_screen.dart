@@ -33,10 +33,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF3F6FD), // ✅ Sama dengan Beranda
       appBar: AppBar(
-        title: const Text('Products'),
+        title: const Text('Produk'),
+        centerTitle: true,
+        elevation: 0,
+        backgroundColor: Colors.indigo, // ✅ Samakan dengan Beranda
+        foregroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.indigo, // ✅ Biar konsisten
         onPressed: () async {
           await Navigator.push(
             context,
@@ -54,7 +60,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text("No products"));
+            return const Center(child: Text("Tidak ada produk tersedia."));
           }
 
           final products = snapshot.data!;
@@ -62,14 +68,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
           return RefreshIndicator(
             onRefresh: _refreshProducts,
             child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 12),
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
 
                 return Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 12.0, vertical: 6.0),
+                      horizontal: 16.0, vertical: 8.0),
                   child: Card(
+                    color: Colors.white,
                     elevation: 3,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -98,8 +106,10 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 height: 60,
                                 fit: BoxFit.cover,
                                 errorBuilder: (_, __, ___) => const Icon(
-                                    Icons.image_not_supported,
-                                    size: 60),
+                                  Icons.image_not_supported,
+                                  size: 60,
+                                  color: Colors.grey,
+                                ),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -125,7 +135,8 @@ class _ProductListScreenState extends State<ProductListScreen> {
                                 ],
                               ),
                             ),
-                            const Icon(Icons.arrow_forward_ios, size: 16),
+                            const Icon(Icons.arrow_forward_ios,
+                                size: 16, color: Colors.indigoAccent), // ✅ Sama
                           ],
                         ),
                       ),

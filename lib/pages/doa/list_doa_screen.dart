@@ -9,13 +9,13 @@ class ListDoaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFFF3F6FD), // Sama dengan BerandaScreen
       appBar: AppBar(
         title: const Text('Daftar Doa'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.indigo, // Disamakan
+        foregroundColor: Colors.white, // Warna teks putih
       ),
       body: FutureBuilder<List<DoaModel>>(
         future: DoaService.fetchDoa(),
@@ -52,6 +52,7 @@ class ListDoaScreen extends StatelessWidget {
                 },
                 borderRadius: BorderRadius.circular(12),
                 child: Card(
+                  color: Colors.white, // Tetap putih agar kontras
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -64,7 +65,8 @@ class ListDoaScreen extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.menu_book, color: Colors.teal),
+                        const Icon(Icons.menu_book,
+                            color: Colors.indigo), // Ubah warna ikon
                         const SizedBox(width: 16),
                         Expanded(
                           child: Text(
@@ -75,7 +77,8 @@ class ListDoaScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Icon(Icons.arrow_forward_ios, size: 16),
+                        const Icon(Icons.arrow_forward_ios,
+                            size: 16, color: Colors.indigoAccent), // Sesuaikan
                       ],
                     ),
                   ),

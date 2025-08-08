@@ -6,37 +6,90 @@ class ProductDetailScreen extends StatelessWidget {
   final int productId;
   const ProductDetailScreen({super.key, required this.productId});
 
+  Future<void> _confirmDelete(BuildContext context, int id) async {
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Hapus Produk'),
+        content: const Text('Apakah kamu yakin ingin menghapus produk ini?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text(
+              'Hapus',
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldDelete == true) {
+      await ProductService.deleteProduct(id);
+      Navigator.pop(context); // kembali ke list
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Product Detail')),
+      appBar: AppBar(title: const Text('Detail Produk')),
       body: FutureBuilder(
         future: ProductService.showProduct(productId),
         builder: (context, snapshot) {
-          if (!snapshot.hasData)
-            return Center(child: CircularProgressIndicator());
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
           final product = snapshot.data!;
-          return Padding(
+
+          return SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.network(
-                  'http://127.0.0.1:8000/storage/${product.image}',
-                  height: 200,
+                Center(
+                  child: Image.network(
+                    'http://127.0.0.1:8000/storage/${product.image}',
+                    height: 200,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.image_not_supported, size: 100),
+                  ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Text(
                   product.name,
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                Text(product.description),
-                Text('Rp ${product.price}'),
+                const SizedBox(height: 8),
+                Text(
+                  'Rp ${product.price}',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.grey,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  product.description,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ElevatedButton.icon(
-                      icon: Icon(Icons.edit),
-                      label: Text("Edit"),
+                      icon: const Icon(Icons.edit),
+                      label: const Text("Edit"),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -47,15 +100,12 @@ class ProductDetailScreen extends StatelessWidget {
                       },
                     ),
                     ElevatedButton.icon(
-                      icon: Icon(Icons.delete),
-                      label: Text("Delete"),
+                      icon: const Icon(Icons.delete),
+                      label: const Text("Hapus"),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
                       ),
-                      onPressed: () async {
-                        await ProductService.deleteProduct(product.id);
-                        Navigator.pop(context);
-                      },
+                      onPressed: () => _confirmDelete(context, product.id),
                     ),
                   ],
                 ),
